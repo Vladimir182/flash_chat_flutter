@@ -1,3 +1,5 @@
+import 'package:flash_chat_flutter/screens/login_screen.dart';
+import 'package:flash_chat_flutter/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -40,36 +42,42 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to login screen.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Log In',
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 5.0,
+                  backgroundColor: Colors.lightBlueAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  minimumSize: const Size(200.0, 50.0),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginScreen.id);
+                },
+                child: const Text(
+                  'Log In',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Go to registration screen.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Register',
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 5.0,
+                    minimumSize: const Size(200, 50),
+                    backgroundColor: Colors.blueAccent),
+                onPressed: () {
+                  Navigator.pushNamed(context, RegistrationScreen.id);
+                },
+                child: const Text(
+                  'Registration',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
                   ),
                 ),
               ),
