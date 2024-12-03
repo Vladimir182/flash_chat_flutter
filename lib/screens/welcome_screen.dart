@@ -11,7 +11,53 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation animationLogo;
+  late Animation<Color?> animationColor;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+
+    animationLogo = CurvedAnimation(
+      parent: controller,
+      curve: Curves.fastOutSlowIn,
+    );
+
+    animationColor =
+        ColorTween(begin: Colors.blue, end: Colors.orange).animate(controller);
+
+    animationColor.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {
+        controller.forward();
+      }
+    });
+
+    controller.forward();
+    // controller.reverse(from: 1);
+    controller.addListener(() {
+      setState(() {});
+      // print(animation.value);
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,13 +73,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Hero(
                   tag: 'logo',
                   child: SizedBox(
-                    height: 60.0,
+                    height: animationLogo.value * 65,
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
-                const Text(
+                Text(
                   'Flash Chat',
                   style: TextStyle(
+                    color: animationColor.value,
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
                   ),
