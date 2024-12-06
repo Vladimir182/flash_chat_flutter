@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 import '../animations/animations.dart';
+import '../components/rounded_button.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 
@@ -80,47 +81,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             const SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 5.0,
-                  backgroundColor: Colors.lightBlueAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  minimumSize: const Size(200.0, 50.0),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, LoginScreen.id);
-                },
-                child: const Text(
-                  'Log In',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            RoundedButton(
+              title: 'Log In',
+              color: Colors.lightBlueAccent,
+              onPressed: () => Navigator.pushNamed(context, LoginScreen.id),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    elevation: 5.0,
-                    minimumSize: const Size(200, 50),
-                    backgroundColor: Colors.blueAccent),
-                onPressed: () {
-                  Navigator.pushNamed(context, RegistrationScreen.id);
-                },
-                child: const Text(
-                  'Registration',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            RoundedButton(
+              title: 'Registration',
+              color: Colors.blueAccent,
+              onPressed: () =>
+                  Navigator.pushNamed(context, RegistrationScreen.id),
             ),
           ],
         ),
