@@ -20,7 +20,7 @@ const kMessageContainerDecoration = BoxDecoration(
 
 // Input decoration for Login and Registration fields
 const kInputDecoration = InputDecoration(
-  hintText: 'Enter your email',
+  hintText: '',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   border: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),

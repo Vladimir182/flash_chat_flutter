@@ -52,7 +52,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               onChanged: (value) {
                 //Do something with the user input.
               },
-              decoration: kInputDecoration,
+              decoration: kInputDecoration.copyWith(
+                hintText: 'Enter your email',
+              ),
             ),
             const SizedBox(
               height: 8.0,
