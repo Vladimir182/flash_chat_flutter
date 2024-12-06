@@ -1,7 +1,9 @@
-import 'package:flash_chat_flutter/animations/animations.dart';
-import 'package:flash_chat_flutter/screens/login_screen.dart';
-import 'package:flash_chat_flutter/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+
+import '../animations/animations.dart';
+import 'login_screen.dart';
+import 'registration_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -54,15 +56,22 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
                 AnimatedBuilder(
-                  animation: colorAnimation.animation,
+                  animation: colorAnimation
+                      .animation, // Передаємо нашу анімацію кольору
                   builder: (context, child) {
-                    return Text(
-                      'Flash Chat',
-                      style: TextStyle(
-                        color: colorAnimation.animation.value,
-                        fontSize: 45.0,
-                        fontWeight: FontWeight.w900,
-                      ),
+                    return AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(
+                          'Flash Chat',
+                          speed: const Duration(milliseconds: 70),
+                          textStyle: TextStyle(
+                            color: colorAnimation.animation
+                                .value, // Колір змінюється з анімацією
+                            fontSize: 45,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
