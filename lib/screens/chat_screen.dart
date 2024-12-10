@@ -43,11 +43,30 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
-          IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                //Implement logout functionality
-              }),
+          TextButton(
+            // icon: const Icon(Icons.close),
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 0, horizontal: 10), // Видаляє зайві відступи
+              minimumSize: const Size(0, 0), // Забезпечує мінімальний розмір
+              tapTargetSize: MaterialTapTargetSize
+                  .shrinkWrap, // Зменшує область натискання
+              foregroundColor: Colors.white, // Колір тексту
+            ),
+            onPressed: () async {
+              final navigator = Navigator.of(context);
+              try {
+                await _auth.signOut();
+                navigator.pop();
+              } catch (e) {
+                print("Помилка виходу $e");
+              }
+            },
+            child: const Text(
+              'Log Out',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
         ],
         title: const Text('⚡️Chat'),
         backgroundColor: Colors.lightBlueAccent,

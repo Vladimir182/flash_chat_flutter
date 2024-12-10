@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
@@ -18,6 +21,11 @@ const kMessageContainerDecoration = BoxDecoration(
   ),
 );
 
+const spinkit = SpinKitSpinningLines(
+  lineWidth: 5,
+  color: Colors.lightBlueAccent,
+  size: 80.0,
+);
 // Input decoration for Login and Registration fields
 const kInputDecoration = InputDecoration(
   hintText: '',
