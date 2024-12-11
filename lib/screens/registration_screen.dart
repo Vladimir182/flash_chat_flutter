@@ -17,8 +17,8 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
+  String email = '';
+  String password = '';
   bool isLoading = false;
 
   @override
@@ -92,6 +92,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     title: 'Register',
                     color: Colors.blueAccent,
                     onPressed: () async {
+                      if (email.isEmpty || password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Email and password cannot be empty'),
+                          ),
+                        );
+                        return;
+                      }
                       setState(() {
                         isLoading = true;
                       });

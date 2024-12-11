@@ -17,9 +17,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
+  String email = '';
+  String password = '';
   bool isLoading = false;
+  bool emailError = false;
+  bool passwordError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +90,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   title: 'Log In',
                   color: Colors.lightBlueAccent,
                   onPressed: () async {
-                    final navigator = Navigator.of(context);
+                    if (email.isEmpty || password.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email and password cannot be empty'),
+                        ),
+                      );
+                      return;
+                    }
                     setState(() {
                       isLoading = true;
                     });
+                    final navigator = Navigator.of(context);
                     try {
                       await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
