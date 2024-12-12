@@ -20,8 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String email = '';
   String password = '';
   bool isLoading = false;
-  bool emailError = false;
-  bool passwordError = false;
 
   @override
   Widget build(BuildContext context) {

@@ -40,6 +40,20 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  // void getMessages() async {
+  //   final messages = await _firestore.collection('messages').get();
+  //   for (var message in messages.docs) {
+  //     print(message.data());
+  //   }
+  // }
+  void messagesStream<QuerySnapshot>() async {
+    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+      for (var message in snapshot.docs) {
+        print(message.data());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,13 +71,17 @@ class _ChatScreenState extends State<ChatScreen> {
               foregroundColor: Colors.white, // Колір тексту
             ),
             onPressed: () async {
-              final navigator = Navigator.of(context);
-              try {
-                await _auth.signOut();
-                navigator.pop();
-              } catch (e) {
-                print("Помилка виходу $e");
-              }
+              //for a test. I have using this button
+              messagesStream();
+
+              // getMessages();
+              // final navigator = Navigator.of(context);
+              // try {
+              //   await _auth.signOut();
+              //   navigator.pop();
+              // } catch (e) {
+              //   print("Помилка виходу $e");
+              // }
             },
             child: const Text(
               'Log Out',
