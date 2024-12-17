@@ -109,30 +109,29 @@ class _ChatScreenState extends State<ChatScreen> {
                   StreamBuilder<QuerySnapshot>(
                     stream: _firestore.collection('messages').snapshots(),
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final messages = snapshot.data!.docs;
-
-                        List<Text> messagesWidgets = [];
-                        for (var message in messages) {
-                          final messageText = message['text'];
-                          final messageSender = message['sender'];
-                          final messageWidget =
-                              Text('$messageSender: $messageText');
-                          messagesWidgets.add(messageWidget);
-                        }
-
-                        if (messagesWidgets.isEmpty) {
-                          return const Center(
-                              child: Text('Немає повідомлень.'));
-                        }
-
-                        return Column(
-                          children: messagesWidgets,
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: spinkit,
                         );
                       }
 
-                      return const Center(
-                        child: spinkit,
+                      final messages = snapshot.data!.docs;
+                      List<Text> messagesWidgets = [];
+
+                      for (var message in messages) {
+                        final messageText = message['text'];
+                        final messageSender = message['sender'];
+                        final messageWidget =
+                            Text('$messageSender: $messageText');
+                        messagesWidgets.add(messageWidget);
+                      }
+
+                      if (messagesWidgets.isEmpty) {
+                        return const Center(child: Text('Немає повідомлень.'));
+                      }
+
+                      return Column(
+                        children: messagesWidgets,
                       );
                     },
                   ),
@@ -162,10 +161,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                 'sender': loggedInUser.email,
                               });
                             }
-
-                            setState(() {
-                              isLoading = false;
+                            Future.delayed(const Duration(seconds: 1), () {
+                              setState(() {
+                                isLoading = false;
+                              });
                             });
+
                             messageController.clear();
                             messageText = '';
                           },
