@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../constants.dart';
 
+final _firestore = FirebaseFirestore.instance;
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -17,9 +19,8 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
 
-  final TextEditingController messageController = TextEditingController();
+  final messageController = TextEditingController();
   late StreamSubscription<User?>? _authSubscription;
   late User loggedInUser;
   late String messageText = '';
@@ -106,35 +107,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  StreamBuilder<QuerySnapshot>(
-                    stream: _firestore.collection('messages').snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: spinkit,
-                        );
-                      }
-
-                      final messages = snapshot.data!.docs;
-                      List<Text> messagesWidgets = [];
-
-                      for (var message in messages) {
-                        final messageText = message['text'];
-                        final messageSender = message['sender'];
-                        final messageWidget =
-                            Text('$messageSender: $messageText');
-                        messagesWidgets.add(messageWidget);
-                      }
-
-                      if (messagesWidgets.isEmpty) {
-                        return const Center(child: Text('Немає повідомлень.'));
-                      }
-
-                      return Column(
-                        children: messagesWidgets,
-                      );
-                    },
-                  ),
+                  const MessagesStream(),
                   Container(
                     decoration: kMessageContainerDecoration,
                     child: Row(
@@ -161,10 +134,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                 'sender': loggedInUser.email,
                               });
                             }
-                            Future.delayed(const Duration(seconds: 1), () {
-                              setState(() {
-                                isLoading = false;
-                              });
+
+                            setState(() {
+                              isLoading = false;
                             });
 
                             messageController.clear();
@@ -180,6 +152,93 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ],
               ),
+      ),
+    );
+  }
+}
+
+class MessagesStream extends StatelessWidget {
+  const MessagesStream({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('messages').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: spinkit,
+          );
+        }
+
+        final messages = snapshot.data!.docs;
+        List<MessageBubble> messagesBubbles = [];
+
+        for (var message in messages) {
+          final messageText = message['text'];
+          final messageSender = message['sender'];
+          final messageBubble = MessageBubble(
+            sender: messageSender,
+            text: messageText,
+          );
+          messagesBubbles.add(messageBubble);
+        }
+
+        if (messagesBubbles.isEmpty) {
+          return const Center(child: Text('Немає повідомлень.'));
+        }
+
+        return Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            children: messagesBubbles,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  const MessageBubble({
+    super.key,
+    required this.sender,
+    required this.text,
+  });
+
+  final String sender;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            sender,
+            style: const TextStyle(
+              color: Colors.black54,
+              fontSize: 12,
+            ),
+          ),
+          Material(
+            elevation: 5,
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.lightBlueAccent,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
