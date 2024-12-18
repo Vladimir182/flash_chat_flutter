@@ -44,16 +44,18 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           children: <Widget>[
             Row(
               children: <Widget>[
-                Hero(
-                  tag: 'logo',
-                  child: AnimatedBuilder(
-                    animation: logoAnimation.animation,
-                    builder: (context, child) {
-                      return SizedBox(
-                        height: logoAnimation.animation.value * 65,
-                        child: Image.asset('images/logo.png'),
-                      );
-                    },
+                Flexible(
+                  child: Hero(
+                    tag: 'logo',
+                    child: AnimatedBuilder(
+                      animation: logoAnimation.animation,
+                      builder: (context, child) {
+                        return SizedBox(
+                          height: logoAnimation.animation.value * 65,
+                          child: Image.asset('images/logo.png'),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 AnimatedBuilder(
