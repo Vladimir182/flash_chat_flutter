@@ -42,85 +42,89 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Flexible(
-                  child: Hero(
-                    tag: 'logo',
-                    child: SizedBox(
-                      height: 200.0,
-                      child: Image.asset('images/logo.png'),
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Flexible(
+                    child: Hero(
+                      tag: 'logo',
+                      child: SizedBox(
+                        height: 200.0,
+                        child: Image.asset('images/logo.png'),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 48.0,
-                ),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    setState(() {
-                      email = value;
-                    });
-                  },
-                  decoration: kInputDecoration.copyWith(
-                    hintText: 'Enter your email',
+                  const SizedBox(
+                    height: 48.0,
                   ),
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                TextField(
-                  textAlign: TextAlign.center,
-                  obscureText: true,
-                  onChanged: (value) {
-                    setState(() {
-                      password = value;
-                    });
-                  },
-                  decoration: kInputDecoration.copyWith(
-                    hintText: 'Enter your password.',
-                  ),
-                ),
-                const SizedBox(
-                  height: 24.0,
-                ),
-                RoundedButton(
-                    title: 'Register',
-                    color: Colors.blueAccent,
-                    onPressed: () async {
-                      if (email.isEmpty || password.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Email and password cannot be empty'),
-                          ),
-                        );
-                        return;
-                      }
+                  TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
                       setState(() {
-                        isLoading = true;
+                        email = value;
                       });
-                      final navigator = Navigator.of(context);
-                      try {
-                        await _auth.createUserWithEmailAndPassword(
-                            email: email, password: password);
-                        navigator.pushNamed(ChatScreen.id);
+                    },
+                    decoration: kInputDecoration.copyWith(
+                      hintText: 'Enter your email',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  TextField(
+                    textAlign: TextAlign.center,
+                    obscureText: true,
+                    onChanged: (value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
+                    decoration: kInputDecoration.copyWith(
+                      hintText: 'Enter your password.',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24.0,
+                  ),
+                  RoundedButton(
+                      title: 'Register',
+                      color: Colors.blueAccent,
+                      onPressed: () async {
+                        if (email.isEmpty || password.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Email and password cannot be empty'),
+                            ),
+                          );
+                          return;
+                        }
                         setState(() {
-                          isLoading = false;
+                          isLoading = true;
                         });
-                      } catch (e) {
-                        setState(() {
-                          isLoading = false;
-                        });
-                        print(e);
-                      }
-                    }),
-              ],
+                        final navigator = Navigator.of(context);
+                        try {
+                          await _auth.createUserWithEmailAndPassword(
+                              email: email, password: password);
+                          navigator.pushNamed(ChatScreen.id);
+                          setState(() {
+                            isLoading = false;
+                          });
+                        } catch (e) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          print(e);
+                        }
+                      }),
+                ],
+              ),
             ),
           ),
         ),

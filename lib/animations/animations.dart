@@ -6,7 +6,7 @@ class LogoAnimation {
 
   LogoAnimation({required TickerProvider vsync})
       : controller = AnimationController(
-          duration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 2),
           vsync: vsync,
         ) {
     animation = CurvedAnimation(
@@ -33,13 +33,13 @@ class ColorAnimation {
         ColorTween(begin: Colors.lightBlueAccent, end: Colors.blueAccent)
             .animate(controller);
 
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.reverse(from: 1.0);
-      } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    });
+    // animation.addStatusListener((status) {
+    //   if (status == AnimationStatus.completed) {
+    //     controller.reverse(from: 1.0);
+    //   } else if (status == AnimationStatus.dismissed) {
+    //     controller.forward();
+    //   }
+    // })
   }
   void dispose() {
     controller.dispose();

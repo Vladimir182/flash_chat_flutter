@@ -42,83 +42,90 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           backgroundColor: Colors.white,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Flexible(
-                  child: Hero(
-                    tag: 'logo',
-                    child: SizedBox(
-                      height: 200.0,
-                      child: Image.asset('images/logo.png'),
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Flexible(
+                    child: Hero(
+                      tag: 'logo',
+                      child: SizedBox(
+                        height: 200.0,
+                        child: Image.asset('images/logo.png'),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 48.0,
-                ),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  decoration: kInputDecoration.copyWith(
-                    hintText: 'Enter your email',
+                  const SizedBox(
+                    height: 48.0,
                   ),
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                TextField(
-                  obscureText: true,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  decoration: kInputDecoration.copyWith(
-                    hintText: 'Enter your password.',
+                  TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    decoration: kInputDecoration.copyWith(
+                      hintText: 'Enter your email',
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 24.0,
-                ),
-                RoundedButton(
-                  title: 'Log In',
-                  color: Colors.lightBlueAccent,
-                  onPressed: () async {
-                    if (email.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Email and password cannot be empty'),
-                        ),
-                      );
-                      return;
-                    }
-                    setState(() {
-                      isLoading = true;
-                    });
-                    final navigator = Navigator.of(context);
-                    try {
-                      await _auth.signInWithEmailAndPassword(
-                          email: email, password: password);
-                      navigator.pushNamed(ChatScreen.id);
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  TextField(
+                    obscureText: true,
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      password = value;
+                    },
+                    decoration: kInputDecoration.copyWith(
+                      hintText: 'Enter your password.',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24.0,
+                  ),
+                  RoundedButton(
+                    title: 'Log In',
+                    color: Colors.lightBlueAccent,
+                    onPressed: () async {
+                      if (email.isEmpty || password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Email and password cannot be empty'),
+                          ),
+                        );
+                        return;
+                      }
                       setState(() {
-                        isLoading = false;
+                        isLoading = true;
                       });
-                    } on FirebaseAuthException catch (e) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                      print('Failed with error code: ${e.code}');
-                      print(e.message);
-                    }
-                  },
-                ),
-              ],
+                      final navigator = Navigator.of(context);
+                      try {
+                        await _auth.signInWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        );
+                        navigator.pushNamed(ChatScreen.id);
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } on FirebaseAuthException catch (e) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                        print('Failed with error code: ${e.code}');
+                        print(e.message);
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

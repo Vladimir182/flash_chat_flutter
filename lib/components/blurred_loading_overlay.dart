@@ -24,7 +24,8 @@ class BlurredLoadingOverlay extends StatelessWidget {
                 BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                   child: Container(
-                    color: Colors.black.withOpacity(0.2), // Темний прозорий фон
+                    color: Colors.black
+                        .withValues(alpha: 0.2), // Темний прозорий фон
                   ),
                 ),
                 // Ви можете додати інший контент або анімації поверх цього шару
