@@ -103,55 +103,58 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SafeArea(
         child: isLoading
             ? spinkit
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  const MessagesStream(),
-                  Container(
-                    decoration: kMessageContainerDecoration,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: messageController,
-                            onChanged: (value) {
-                              messageText = value;
-                            },
-                            decoration: kMessageTextFieldDecoration,
+            : GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    const MessagesStream(),
+                    Container(
+                      decoration: kMessageContainerDecoration,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              controller: messageController,
+                              onChanged: (value) {
+                                messageText = value;
+                              },
+                              decoration: kMessageTextFieldDecoration,
+                            ),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            //messageText + loggedInUser.email
-                            if (messageText.trim().isNotEmpty) {
+                          TextButton(
+                            onPressed: () {
+                              //messageText + loggedInUser.email
+                              if (messageText.trim().isNotEmpty) {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                _firestore.collection('messages').add({
+                                  'text': messageText,
+                                  'sender': loggedInUser.email,
+                                  'timestamp': FieldValue.serverTimestamp(),
+                                });
+                              }
+
                               setState(() {
-                                isLoading = true;
+                                isLoading = false;
                               });
-                              _firestore.collection('messages').add({
-                                'text': messageText,
-                                'sender': loggedInUser.email,
-                                'timestamp': FieldValue.serverTimestamp(),
-                              });
-                            }
 
-                            setState(() {
-                              isLoading = false;
-                            });
-
-                            messageController.clear();
-                            messageText = '';
-                          },
-                          child: const Text(
-                            'Send',
-                            style: kSendButtonTextStyle,
+                              messageController.clear();
+                              messageText = '';
+                            },
+                            child: const Text(
+                              'Send',
+                              style: kSendButtonTextStyle,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
     );
